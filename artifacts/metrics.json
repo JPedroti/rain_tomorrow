@@ -1,0 +1,94 @@
+{
+  "positive_class": "RainTomorrow = Yes",
+  "metric_definitions": {
+    "roc_auc": "sklearn.metrics.roc_auc_score",
+    "pr_auc": "sklearn.metrics.average_precision_score (Average Precision)",
+    "ks": "max(TPR - FPR) na curva ROC (KS de duas amostras entre scores de positivos e negativos)",
+    "ci": "bootstrap percentil 95%, 1000 reamostragens, seed 42"
+  },
+  "baseline": {
+    "params": {
+      "feature_set": "full_without_maxtemp",
+      "preprocessing": "base",
+      "C": 1.0,
+      "l1_ratio": 0.0,
+      "class_weight": null
+    },
+    "test": {
+      "n": 26746,
+      "n_pos": 6023,
+      "n_neg": 20723,
+      "prevalence": 0.22519255215733194,
+      "roc_auc": 0.8750856920786105,
+      "pr_auc": 0.7126249454915026,
+      "ks": 0.582140215310819,
+      "status": "ok",
+      "roc_auc_ci_low": 0.8701151541397635,
+      "roc_auc_ci_high": 0.8801705132682361,
+      "pr_auc_ci_low": 0.7015870427324539,
+      "pr_auc_ci_high": 0.7236055421069764,
+      "ks_ci_low": 0.5717066012378456,
+      "ks_ci_high": 0.5946850335150785
+    }
+  },
+  "selected_params": {
+    "feature_set": "full_without_maxtemp",
+    "preprocessing": "indicators",
+    "C": 0.1,
+    "l1_ratio": 0.0,
+    "class_weight": null
+  },
+  "cv_selected": {
+    "roc_auc_mean": 0.8742411333863338,
+    "roc_auc_se": 0.000733198434512309,
+    "pr_auc_mean": 0.7082639102051624,
+    "pr_auc_se": 0.002345358060625825,
+    "ks_mean": 0.5829559130760537,
+    "ks_se": 0.0018741891340665188
+  },
+  "train": {
+    "n": 106981,
+    "n_pos": 24091,
+    "n_neg": 82890,
+    "prevalence": 0.2251895196343276,
+    "roc_auc": 0.8753952767129665,
+    "pr_auc": 0.7103910304499815,
+    "ks": 0.5846432144407776,
+    "status": "ok"
+  },
+  "test": {
+    "n": 26746,
+    "n_pos": 6023,
+    "n_neg": 20723,
+    "prevalence": 0.22519255215733194,
+    "roc_auc": 0.8756773855410811,
+    "pr_auc": 0.7137837325171188,
+    "ks": 0.5838823668658263,
+    "status": "ok",
+    "roc_auc_ci_low": 0.870696804864062,
+    "roc_auc_ci_high": 0.8806563436407262,
+    "pr_auc_ci_low": 0.7025573650352807,
+    "pr_auc_ci_high": 0.7253662072931427,
+    "ks_ci_low": 0.5738780372041061,
+    "ks_ci_high": 0.596988234938643
+  },
+  "references_test": {
+    "no_skill": {
+      "roc_auc": 0.5,
+      "pr_auc": 0.22519255215733194,
+      "ks": 0.0
+    },
+    "persistence_rain_today": {
+      "n": 26746,
+      "n_pos": 6023,
+      "n_neg": 20723,
+      "prevalence": 0.22519255215733194,
+      "roc_auc": 0.6608178397101193,
+      "pr_auc": 0.3410421778486352,
+      "ks": 0.3219645511264549,
+      "status": "ok"
+    }
+  },
+  "oot": null,
+  "oot_status": "não avaliado: modelo congelado, OOT ainda fechado"
+}

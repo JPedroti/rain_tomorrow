@@ -1,0 +1,28 @@
+# Data (download instructions in data/README.md)
+data/*.csv
+data/*.zip
+
+# Brief from the mentorship (not versioned)
+rain_tomorrow_classificacao_estabilidade_temporal.docx.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Environments
+.venv/
+venv/
+env/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Caches
+.pytest_cache/
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db

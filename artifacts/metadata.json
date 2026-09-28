@@ -1,0 +1,167 @@
+{
+  "project": "Rain Tomorrow - Projeto 04",
+  "frozen_at_utc": "2026-09-28T22:41:09+00:00",
+  "model_path": "artifacts/model.joblib",
+  "model_sha256": "b274388f39b24a3361f914cd78161d3dcd09fbe96a16273a6ebc2534c67be3ff",
+  "dataset": {
+    "path": "data/weatherAUS.csv",
+    "sha256": "573fd715cd69fcacc4df32024d823b450ae3edaae7e8ff2eeb623adbed424014",
+    "audited_sha256": "573fd715cd69fcacc4df32024d823b450ae3edaae7e8ff2eeb623adbed424014"
+  },
+  "target": {
+    "column": "RainTomorrow",
+    "positive_class": "Yes",
+    "definition": "Chuva > 1 mm nas 24h entre 09:00 de t e 09:00 de t+1 (= RainToday de t+1)"
+  },
+  "temporal_protocol": {
+    "oot_start": "2017-01-01",
+    "development_rows": 136837,
+    "dropped_missing_target": 3110,
+    "train_rows": 106981,
+    "test_rows": 26746,
+    "train_date_range": [
+      "2007-11-01",
+      "2016-12-31"
+    ],
+    "test_size": 0.2,
+    "random_state": 42,
+    "stratify": true,
+    "oot_read_by_training": false
+  },
+  "features": {
+    "feature_set": "full_without_maxtemp",
+    "numeric": [
+      "MinTemp",
+      "Rainfall",
+      "Evaporation",
+      "Sunshine",
+      "WindGustSpeed",
+      "WindSpeed9am",
+      "WindSpeed3pm",
+      "Humidity9am",
+      "Humidity3pm",
+      "Pressure9am",
+      "Pressure3pm",
+      "Cloud9am",
+      "Cloud3pm",
+      "Temp9am",
+      "Temp3pm"
+    ],
+    "categorical": [
+      "Location",
+      "WindGustDir",
+      "WindDir9am",
+      "WindDir3pm",
+      "RainToday"
+    ],
+    "date_features": [
+      "doy_sin",
+      "doy_cos"
+    ],
+    "input_columns": [
+      "Date",
+      "MinTemp",
+      "Rainfall",
+      "Evaporation",
+      "Sunshine",
+      "WindGustSpeed",
+      "WindSpeed9am",
+      "WindSpeed3pm",
+      "Humidity9am",
+      "Humidity3pm",
+      "Pressure9am",
+      "Pressure3pm",
+      "Cloud9am",
+      "Cloud3pm",
+      "Temp9am",
+      "Temp3pm",
+      "Location",
+      "WindGustDir",
+      "WindDir9am",
+      "WindDir3pm",
+      "RainToday"
+    ],
+    "n_model_columns": 135,
+    "prediction_moment": "Previsão emitida ao fim do dia t (00:00 de t+1), com as observações do dia t. O alvo é a chuva > 1 mm nas 24h entre 09:00 de t e 09:00 de t+1; as observações das 15h, Sunshine e WindGust* caem dentro dessa janela, mas fecham até 00:00 de t+1. MaxTemp foi excluída: sua janela (09:00 de t a 09:00 de t+1) só fecha depois do momento da previsão (ver FEATURE_WINDOWS).",
+    "measurement_windows": {
+      "MinTemp": "24h até 09:00 de t",
+      "Rainfall": "24h até 09:00 de t",
+      "Evaporation": "24h até 09:00 de t",
+      "Sunshine": "24h até 00:00 de t+1",
+      "WindGustSpeed": "24h até 00:00 de t+1",
+      "WindSpeed9am": "média 10 min antes de 09:00 de t",
+      "WindSpeed3pm": "média 10 min antes de 15:00 de t",
+      "Humidity9am": "instante 09:00 de t",
+      "Humidity3pm": "instante 15:00 de t",
+      "Pressure9am": "instante 09:00 de t",
+      "Pressure3pm": "instante 15:00 de t",
+      "Cloud9am": "instante 09:00 de t",
+      "Cloud3pm": "instante 15:00 de t",
+      "Temp9am": "instante 09:00 de t",
+      "Temp3pm": "instante 15:00 de t",
+      "Location": "fixo",
+      "WindGustDir": "24h até 00:00 de t+1",
+      "WindDir9am": "média 10 min antes de 09:00 de t",
+      "WindDir3pm": "média 10 min antes de 15:00 de t",
+      "RainToday": "24h até 09:00 de t"
+    }
+  },
+  "model": {
+    "algorithm": "sklearn.linear_model.LogisticRegression",
+    "preprocessing_variant": "indicators",
+    "preprocessing_options": {
+      "missing_indicators": true,
+      "log_transform": false
+    },
+    "C": 0.1,
+    "l1_ratio": 0.0,
+    "penalty": "l2",
+    "solver": "lbfgs",
+    "class_weight": null,
+    "max_iter": 5000,
+    "n_iter": [
+      71
+    ],
+    "intercept": -1.200350530479513,
+    "n_nonzero_coefficients": 135
+  },
+  "selection": {
+    "protocol": "CV estratificada 5-fold somente no TRAIN. Estágio 1: variantes de preprocessing com a LR baseline. Estágio 2: grade C x penalty (l1_ratio 0/1) x class_weight na variante escolhida. Métrica: ROC-AUC médio. Regra de 1 erro-padrão: entre os candidatos com média >= melhor média - EP do melhor, escolhe o primeiro na ordem de preferência (preprocessing mais simples; class_weight=None, menor C, L2 antes de L1).",
+    "metric": "roc_auc",
+    "cv_folds": 5,
+    "C_grid": [
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "l1_ratio_grid": [
+      0.0,
+      1.0
+    ],
+    "class_weight_grid": [
+      null,
+      "balanced"
+    ],
+    "n_candidates_evaluated": 27
+  },
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.9.0",
+    "joblib": "1.5.3"
+  },
+  "source_sha256_at_freeze": {
+    "src/config.py": "8e6d0be76e7b94f817125b7a2a47b47487522735058d29c4be96b346a9847483",
+    "src/data.py": "422974167763125d60f5af42706ea8cce6f76628228132336d655a29e767945d",
+    "src/preprocessing.py": "cb3a85846713df88b9c2919e90eb20a77ffeafd76deb1718accc54aed8d8b87d",
+    "src/modeling.py": "869573124e396e2b1a051543e065fe904d6034f89c88be51101aa2ffddb83abe",
+    "src/metrics.py": "58ab6b4c817322dc3ba95c55d85b3688b47c6c4d69810035ab3cddb97f86c9c1",
+    "scripts/train.py": "45ce05f32cac5a3a1bafb1520b690022cfa12bcc9f46fdbb21c3d06e64d4cde2"
+  }
+}

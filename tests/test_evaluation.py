@@ -42,7 +42,9 @@ def test_target_drift_report_rates(synthetic_run):
     train, test, oot, _, _ = synthetic_run
     by_month, rates = target_drift_report(train, test, oot)
     assert rates["oot"] == pytest.approx((oot[config.TARGET_COL] == "Yes").mean())
-    assert by_month["oot_rate"].notna().sum() == 6 and by_month["dev_rate"].notna().sum() == 12
+    assert by_month["oot_rate"].notna().sum() == 6 and by_month["train_rate"].notna().sum() == 12
+    assert by_month["test_rate"].notna().sum() == 12
+    assert by_month["oot_n"].sum() == oot[config.TARGET_COL].notna().sum()
     assert 0 <= rates["oot_expected_from_train_seasonality"] <= 1
 
 
@@ -54,6 +56,14 @@ def test_feature_drift_report_covers_both_references(synthetic_run):
     for features in per_ref:
         assert set(config.NUMERIC_FEATURES) | {"Location", "score do modelo"} == features
     assert drift["psi"].notna().all()
+    in_model = drift.set_index("feature")["in_model"].groupby(level=0).first()
+    assert not in_model["MaxTemp"] and in_model["Humidity3pm"] and in_model["Location"]
+
+
+def test_monthly_performance_reports_days_covered(synthetic_run):
+    _, test, oot, _, s = synthetic_run
+    monthly = monthly_performance(oot, *s["oot"], test, *s["test"])
+    assert (monthly["days_covered"] <= 31).all() and monthly["days_covered"].min() >= 1
 
 
 def test_figures_render(synthetic_run, tmp_path):

@@ -50,10 +50,13 @@ def main() -> None:
         assert abs(check[m] - metrics["test"][m]) < 1e-12, f"TEST {m} differs from the value recorded at freeze"
 
     # ---- OOT opened here ----------------------------------------------------------------------------
+    opened_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     oot_all = load_oot_data()
     oot, n_missing = drop_missing_target(oot_all)
     X_oot, y_oot = get_xy(oot)
     s_oot = model.predict_proba(X_oot)[:, 1]
+    # Every OOT row is scored for score drift (the target is not needed to score).
+    s_oot_all = model.predict_proba(oot_all.drop(columns=[config.TARGET_COL]))[:, 1]
     oot_metrics = evaluate_scores(y_oot, s_oot)
     persistence_oot = discrimination_metrics(y_oot, persistence_score(X_oot))
     print(f"OOT: {len(oot_all)} rows, {n_missing} without target, {len(oot)} evaluated")
@@ -67,7 +70,7 @@ def main() -> None:
 
     by_month, rates = target_drift_report(train, test, oot)
     by_month.to_csv(config.TARGET_DRIFT_PATH, index=False)
-    drift = feature_drift_report(train, oot, s_train, s_oot)
+    drift = feature_drift_report(train, oot_all, s_train, s_oot_all)
     drift.to_csv(config.DRIFT_REPORT_PATH, index=False)
 
     # Figures
@@ -87,23 +90,42 @@ def main() -> None:
                 "prevalence": float(res["prevalence"]), "note": note}
 
     metrics["oot"] = {**oot_metrics, "n_rows_total": len(oot_all), "n_missing_target": n_missing}
+    metrics["test_to_oot_delta"] = {m: oot_metrics[m] - metrics["test"][m] for m in (*METRIC_KEYS, "prevalence")}
     metrics["references_oot"] = {"no_skill": {"roc_auc": 0.5, "pr_auc": float(y_oot.mean()), "ks": 0.0},
                                  "persistence_rain_today": persistence_oot}
-    metrics["oot_months"] = {"ranking_metric": config.PERIOD_RANKING_METRIC,
-                             "best": best.to_dict(), "worst": worst.to_dict(),
-                             "n_months": len(monthly), "n_months_evaluated": len(valid)}
+    metrics["oot_months"] = {
+        "ranking_metric": config.PERIOD_RANKING_METRIC,
+        "window_rule": f"janela avaliada só com >= {config.MIN_WINDOW_ROWS} linhas e >= {config.MIN_WINDOW_PER_CLASS} "
+                       "casos de cada classe; caso contrário métricas vazias com status",
+        "best": best.to_dict(), "worst": worst.to_dict(),
+        "n_months": len(monthly), "n_months_evaluated": len(valid),
+        "insufficient_windows": monthly.loc[monthly["status"] != "ok", ["period", "n", "status"]].to_dict("records"),
+    }
     metrics["target_rates"] = rates
+    rule = f"critério: {config.PERIOD_RANKING_METRIC} entre meses com volume suficiente"
     metrics["final_comparison"] = [
-        row("Teste", metrics["test"]),
-        row("OOT 2017", oot_metrics),
-        row(f"Melhor mês do OOT ({best['period']})", best),
-        row(f"Pior mês do OOT ({worst['period']})", worst),
+        row("Teste", metrics["test"], "20% aleatório estratificado do histórico < 2017"),
+        row("OOT 2017", oot_metrics, "todas as linhas de 2017 com target (jan-jun)"),
+        row(f"Melhor mês do OOT ({best['period']})", best, f"maior {rule}"),
+        row(f"Pior mês do OOT ({worst['period']})", worst, f"menor {rule}"),
     ]
     metrics["oot_status"] = "avaliado após o congelamento"
-    metrics["oot_evaluated_at_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    metrics["oot_evaluated_at_utc"] = opened_at
     write_json(config.METRICS_PATH, metrics)
 
-    assert file_sha256(config.MODEL_PATH) == frozen_sha, "model file changed during evaluation"
+    after_sha = file_sha256(config.MODEL_PATH)
+    assert after_sha == frozen_sha, "model file changed during evaluation"
+    # Append-only evaluation record; the freeze fields of metadata.json are left untouched.
+    metadata["oot_evaluation"] = {
+        "evaluated_at_utc": opened_at,
+        "model_sha256_verified_before": frozen_sha,
+        "model_sha256_after": after_sha,
+        "fit_called": False,
+        "oot_rows_total": len(oot_all), "oot_rows_with_target": len(oot), "oot_rows_missing_target": n_missing,
+        "oot_date_range": [str(oot_all["Date"].min().date()), str(oot_all["Date"].max().date())],
+        "reports": ["reports/temporal_performance.csv", "reports/target_drift.csv", "reports/drift_report.csv"],
+    }
+    write_json(config.METADATA_PATH, metadata)
     print(f"best month {best['period']} ROC-AUC {best['roc_auc']:.4f} | worst month {worst['period']} ROC-AUC {worst['roc_auc']:.4f}")
     print("model hash unchanged after evaluation")
 

@@ -199,7 +199,7 @@ def plot_target_rate(monthly_rate: pd.DataFrame, path=None):
     """Positive rate by calendar month: historical development years vs OOT 2017."""
     apply_style()
     fig, ax = plt.subplots(figsize=(8.5, 4))
-    for color, col, label in [(SERIES[1], "dev_rate", "Histórico < 2017 (mesmo mês)"), (SERIES[0], "oot_rate", "OOT 2017")]:
+    for color, col, label in [(SERIES[1], "train_rate", "TRAIN < 2017 (mesmo mês)"), (SERIES[0], "oot_rate", "OOT 2017")]:
         sub = monthly_rate.dropna(subset=[col])
         ax.plot(sub["month"], sub[col], color=color, marker="o", markersize=6, label=label)
     ax.set_xticks(range(1, 13))

@@ -163,5 +163,23 @@
     "src/modeling.py": "869573124e396e2b1a051543e065fe904d6034f89c88be51101aa2ffddb83abe",
     "src/metrics.py": "58ab6b4c817322dc3ba95c55d85b3688b47c6c4d69810035ab3cddb97f86c9c1",
     "scripts/train.py": "45ce05f32cac5a3a1bafb1520b690022cfa12bcc9f46fdbb21c3d06e64d4cde2"
+  },
+  "oot_evaluation": {
+    "evaluated_at_utc": "2026-09-28T23:12:29+00:00",
+    "model_sha256_verified_before": "b274388f39b24a3361f914cd78161d3dcd09fbe96a16273a6ebc2534c67be3ff",
+    "model_sha256_after": "b274388f39b24a3361f914cd78161d3dcd09fbe96a16273a6ebc2534c67be3ff",
+    "fit_called": false,
+    "oot_rows_total": 8623,
+    "oot_rows_with_target": 8466,
+    "oot_rows_missing_target": 157,
+    "oot_date_range": [
+      "2017-01-01",
+      "2017-06-25"
+    ],
+    "reports": [
+      "reports/temporal_performance.csv",
+      "reports/target_drift.csv",
+      "reports/drift_report.csv"
+    ]
   }
 }

@@ -60,6 +60,10 @@ Verificados por execução de código sobre o arquivo real. Não reescrever de m
   conjunto "só até 09:00" existem apenas como **análise de sensibilidade informativa** (CV + TEST), nunca avaliados no OOT.
 - Split 80/20 estratificado, `random_state=42`; linhas sem target removidas; README/notebook em português, código em inglês;
   o PDF do enunciado não é versionado.
+- **Modelo congelado em 2026-09-28T22:41:09Z** (SHA-256 `b274388f39b24a3361f914cd78161d3dcd09fbe96a16273a6ebc2534c67be3ff`;
+  `indicators`, C=0,1, L2, `class_weight=None`). **OOT aberto em 2026-09-28T23:12:29Z.** Desde então modelo, preprocessing,
+  features, hiperparâmetros, threshold e calibração são **imutáveis**. Qualquer mudança de modelagem é um novo ciclo de
+  desenvolvimento, que exige novo período OOT e registro explícito no README.
 
 ## 5. Modelagem
 

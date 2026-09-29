@@ -89,6 +89,155 @@
       "status": "ok"
     }
   },
-  "oot": null,
-  "oot_status": "não avaliado: modelo congelado, OOT ainda fechado"
+  "oot": {
+    "n": 8466,
+    "n_pos": 1763,
+    "n_neg": 6703,
+    "prevalence": 0.20824474368060478,
+    "roc_auc": 0.8653085719696626,
+    "pr_auc": 0.6740241898551416,
+    "ks": 0.568233473570177,
+    "status": "ok",
+    "roc_auc_ci_low": 0.8552678256255983,
+    "roc_auc_ci_high": 0.8739782651274474,
+    "pr_auc_ci_low": 0.6508934556662551,
+    "pr_auc_ci_high": 0.6969173488402881,
+    "ks_ci_low": 0.5506340454448575,
+    "ks_ci_high": 0.5912318641894276,
+    "n_rows_total": 8623,
+    "n_missing_target": 157
+  },
+  "oot_status": "avaliado após o congelamento",
+  "test_to_oot_delta": {
+    "roc_auc": -0.0103688135714185,
+    "pr_auc": -0.03975954266197723,
+    "ks": -0.015648893295649335,
+    "prevalence": -0.016947808476727166
+  },
+  "references_oot": {
+    "no_skill": {
+      "roc_auc": 0.5,
+      "pr_auc": 0.20824474368060478,
+      "ks": 0.0
+    },
+    "persistence_rain_today": {
+      "n": 8466,
+      "n_pos": 1763,
+      "n_neg": 6703,
+      "prevalence": 0.20824474368060478,
+      "roc_auc": 0.6688062396862793,
+      "pr_auc": 0.3324591756456393,
+      "ks": 0.337601647876701,
+      "status": "ok"
+    }
+  },
+  "oot_months": {
+    "ranking_metric": "roc_auc",
+    "window_rule": "janela avaliada só com >= 200 linhas e >= 30 casos de cada classe; caso contrário métricas vazias com status",
+    "best": {
+      "period": "2017-06",
+      "days_covered": 25,
+      "n": 1197,
+      "n_pos": 189,
+      "n_neg": 1008,
+      "prevalence": 0.15789473684210525,
+      "roc_auc": 0.882243638196019,
+      "pr_auc": 0.6382371794027651,
+      "ks": 0.6117724867724867,
+      "status": "ok",
+      "roc_auc_ci_low": 0.8562627631218402,
+      "roc_auc_ci_high": 0.9077479881622611,
+      "pr_auc_ci_low": 0.5647589709954692,
+      "pr_auc_ci_high": 0.7105506811150466,
+      "ks_ci_low": 0.5627104287029578,
+      "ks_ci_high": 0.6726236946269823,
+      "mean_score": 0.17933341528698496,
+      "month": 6,
+      "hist_test_n": 2174,
+      "hist_test_prevalence": 0.2736890524379025,
+      "hist_test_roc_auc": 0.8735951378651524,
+      "hist_test_pr_auc": 0.7370990638318413,
+      "hist_test_ks": 0.6125885439673019,
+      "delta_roc_auc_vs_hist_test": 0.008648500330866615,
+      "delta_pr_auc_vs_hist_test": -0.09886188442907617,
+      "delta_ks_vs_hist_test": -0.0008160571948151452
+    },
+    "worst": {
+      "period": "2017-01",
+      "days_covered": 31,
+      "n": 1492,
+      "n_pos": 298,
+      "n_neg": 1194,
+      "prevalence": 0.19973190348525469,
+      "roc_auc": 0.8206974469663756,
+      "pr_auc": 0.6464859181677307,
+      "ks": 0.5027261587579959,
+      "status": "ok",
+      "roc_auc_ci_low": 0.7914562056902076,
+      "roc_auc_ci_high": 0.8529940669119664,
+      "pr_auc_ci_low": 0.5933172543459745,
+      "pr_auc_ci_high": 0.6984056577327422,
+      "ks_ci_low": 0.463827194776422,
+      "ks_ci_high": 0.5695441125870164,
+      "mean_score": 0.2113168287189072,
+      "month": 1,
+      "hist_test_n": 2303,
+      "hist_test_prevalence": 0.18888406426400348,
+      "hist_test_roc_auc": 0.8789226906889168,
+      "hist_test_pr_auc": 0.6875611714067492,
+      "hist_test_ks": 0.6032809077260084,
+      "delta_roc_auc_vs_hist_test": -0.05822524372254123,
+      "delta_pr_auc_vs_hist_test": -0.041075253239018505,
+      "delta_ks_vs_hist_test": -0.10055474896801253
+    },
+    "n_months": 6,
+    "n_months_evaluated": 6,
+    "insufficient_windows": []
+  },
+  "target_rates": {
+    "train": 0.2251895196343276,
+    "test": 0.22519255215733194,
+    "oot": 0.20824474368060478,
+    "oot_expected_from_train_seasonality": 0.22043456341771742,
+    "train_same_months_as_oot": 0.22221794303980283
+  },
+  "final_comparison": [
+    {
+      "set": "Teste",
+      "roc_auc": 0.8756773855410811,
+      "pr_auc": 0.7137837325171188,
+      "ks": 0.5838823668658263,
+      "n": 26746,
+      "prevalence": 0.22519255215733194,
+      "note": "20% aleatório estratificado do histórico < 2017"
+    },
+    {
+      "set": "OOT 2017",
+      "roc_auc": 0.8653085719696626,
+      "pr_auc": 0.6740241898551416,
+      "ks": 0.568233473570177,
+      "n": 8466,
+      "prevalence": 0.20824474368060478,
+      "note": "todas as linhas de 2017 com target (jan-jun)"
+    },
+    {
+      "set": "Melhor mês do OOT (2017-06)",
+      "roc_auc": 0.882243638196019,
+      "pr_auc": 0.6382371794027651,
+      "ks": 0.6117724867724867,
+      "n": 1197,
+      "prevalence": 0.15789473684210525,
+      "note": "maior critério: roc_auc entre meses com volume suficiente"
+    },
+    {
+      "set": "Pior mês do OOT (2017-01)",
+      "roc_auc": 0.8206974469663756,
+      "pr_auc": 0.6464859181677307,
+      "ks": 0.5027261587579959,
+      "n": 1492,
+      "prevalence": 0.19973190348525469,
+      "note": "menor critério: roc_auc entre meses com volume suficiente"
+    }
+  ],
+  "oot_evaluated_at_utc": "2026-09-28T23:12:29+00:00"
 }
